@@ -1,6 +1,5 @@
-import Image from 'next/image';
-import Banner from './components/Banner';
-import BlogFeed from './components/BlogFeed';
+import Banner from '../components/Banner';
+import BlogFeed from '../components/BlogFeed';
 
 export default function Home() {
 	return (

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { twMerge } from 'tailwind-merge';
 
 const LinkButton = ({ href, children, variant, className }) => {
 	let btnStyle = 'bg-white text-black hover:bg-gray-300';
@@ -13,11 +14,15 @@ const LinkButton = ({ href, children, variant, className }) => {
 const Button = ({ children, variant, className }) => {
 	let btnStyle = 'bg-white text-black hover:bg-gray-300';
 	if (variant === 'text') btnStyle = 'text-gray-300 hover:text-white';
+	if (variant === 'primary')
+		btnStyle = 'text-white bg-black hover:bg-gray-800 ';
 	return (
 		<div
-			className={`w-fit px-5 py-2 rounded-lg text-lg font-semibold  ${btnStyle} ${
-				className ?? ''
-			}`}
+			className={twMerge(
+				'w-fit px-8 py-3 rounded-full text-lg font-semibold text-center tracking-wide hover:cursor-pointer',
+				btnStyle,
+				className
+			)}
 		>
 			{children}
 		</div>

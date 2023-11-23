@@ -7,10 +7,10 @@ const NavBar = () => {
 			<div className='w-full h-20 flex items-center bg-black px-8'>
 				<Logo />
 				<div className='flex-grow' />
-				<LinkButton href='/login' variant='text' className='mr-2'>
+				<LinkButton href='/auth/login' variant='text' className='mr-2'>
 					Log in
 				</LinkButton>
-				<LinkButton href='/signup' className='mr-2'>
+				<LinkButton href='/auth/signup' className='mr-2'>
 					Sign up
 				</LinkButton>
 			</div>
