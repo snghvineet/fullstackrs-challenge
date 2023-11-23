@@ -9,7 +9,11 @@ const AuthForm = ({ type }) => {
 		<form className='flex flex-col items-center text-lg'>
 			{signingUp && <Input label='Name' placeholder='Your name' />}
 			<Input label='Email' placeholder='author@example.com' />
-			<Input label='Password' placeholder='8+ characters' />
+			<Input
+				label='Password'
+				placeholder='8+ characters'
+				inputProps={{ type: 'password' }}
+			/>
 			{signingUp && <CheckBox />}
 			<Button variant='primary' className='px-10 py-4 w-full mt-4'>
 				{signingUp ? 'Create Account' : 'Sign in'}
