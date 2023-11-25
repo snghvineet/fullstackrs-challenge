@@ -1,6 +1,7 @@
 import { Roboto } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
 import './globals.css';
-import NavBar from './components/NavBar';
+import 'react-toastify/dist/ReactToastify.css';
 
 const roboto = Roboto({
 	subsets: ['latin'],

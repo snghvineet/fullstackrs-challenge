@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { FaCheck } from 'react-icons/fa';
 import { twMerge } from 'tailwind-merge';
 
-const Input = ({ label, placeholder, inputProps }) => {
+const Input = ({ label, placeholder, inputProps, value, onChange }) => {
 	const id = 'input-id-' + label;
 	return (
 		<div className='flex flex-col mb-10 w-full'>
@@ -16,6 +16,8 @@ const Input = ({ label, placeholder, inputProps }) => {
 				className='border border-gray-300 rounded-xl py-5 px-6 outline-none outline-offset-0 focus:outline-lime-100 focus:outline-4'
 				id={id}
 				placeholder={placeholder}
+				value={value}
+				onChange={onChange}
 				{...inputProps}
 			/>
 			<span className='mt-2 hidden'>Error text</span>
