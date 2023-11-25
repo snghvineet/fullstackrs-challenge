@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button } from './Button';
 import BlogTile from './BlogTile';
+import { cookies } from 'next/headers';
+import { createClient } from '@/utils/server';
 
 const DEMO_BLOGS = [
 	{
@@ -29,14 +31,18 @@ const DEMO_BLOGS = [
 	},
 ];
 
-const BlogFeed = () => {
+const BlogFeed = ({ blogs = [] }) => {
 	return (
-		<section>
+		<section className='mx-12 pb-12'>
 			<div className='flex w-full items-center justify-between mb-2'>
-				<h6 className='text-xl font-medium'>Feed</h6>
+				<h6 className='text-xl font-semibold '>Feed</h6>
+				{/* <ul className='flex'>
+					<li>List</li>
+					<li>Other</li>
+				</ul> */}
 			</div>
-			<div className='grid grid-cols-3 gap-8'>
-				{DEMO_BLOGS.map((blog) => (
+			<div className='grid grid-cols-3 gap-12'>
+				{[...DEMO_BLOGS, ...blogs].map((blog) => (
 					<BlogTile key={blog.id} blog={blog} />
 				))}
 			</div>

@@ -8,12 +8,12 @@ import { twMerge } from 'tailwind-merge';
 const Input = ({ label, placeholder, inputProps, value, onChange }) => {
 	const id = 'input-id-' + label;
 	return (
-		<div className='flex flex-col mb-10 w-full'>
-			<label htmlFor={id} className='font-semibold text-xl mb-2'>
+		<div className='flex flex-col mb-6 w-full'>
+			<label htmlFor={id} className='font-semibold text-lg mb-2'>
 				{label}
 			</label>
 			<input
-				className='border border-gray-300 rounded-xl py-5 px-6 outline-none outline-offset-0 focus:outline-lime-100 focus:outline-4'
+				className='border border-gray-300 rounded-xl py-4 px-6 outline-none outline-offset-0 focus:outline-lime-100 focus:outline-4'
 				id={id}
 				placeholder={placeholder}
 				value={value}

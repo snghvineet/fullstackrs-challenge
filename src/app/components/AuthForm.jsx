@@ -15,13 +15,17 @@ const AuthForm = ({ type }) => {
 	const signingUp = type === 'signup';
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
+	const [fullname, setFullname] = useState('');
 
 	const handleSignUp = async () => {
 		console.log('Signing up...');
 		const { error } = await supabase.auth.signUp({
 			email,
 			password,
-			options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+			options: {
+				emailRedirectTo: `${window.location.origin}/auth/callback`,
+				data: { full_name: fullname },
+			},
 		});
 		router.refresh();
 		if (error) {
@@ -57,7 +61,14 @@ const AuthForm = ({ type }) => {
 		type === 'signup' ? `/auth/singup/callback` : `/auth/login/callback`;
 	return (
 		<form className='flex flex-col items-center text-lg' onSubmit={submitForm}>
-			{signingUp && <Input label='Name' placeholder='Your name' />}
+			{signingUp && (
+				<Input
+					label='Name'
+					placeholder='Your name'
+					value={fullname}
+					onChange={(e) => setFullname(e.target.value)}
+				/>
+			)}
 			<Input
 				label='Email'
 				placeholder='author@example.com'
@@ -72,7 +83,7 @@ const AuthForm = ({ type }) => {
 				inputProps={{ type: 'password' }}
 			/>
 			{signingUp && <CheckBox />}
-			<Button variant='primary' className='px-10 py-4 w-full mt-4'>
+			<Button variant='primary' className='px-10 py-4 w-full mt-6'>
 				{signingUp ? 'Create Account' : 'Sign in'}
 			</Button>
 			<label

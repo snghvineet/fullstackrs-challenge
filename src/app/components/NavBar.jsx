@@ -38,10 +38,10 @@ const NavBar = async ({ loggedIn }) => {
 	);
 	const loggedInNavComponents = (
 		<>
-			<LinkButton href='/auth/login' variant='text' className='mr-2'>
+			<LinkButton href='/write-blog' variant='text' className='px-4'>
 				Write a blog
 			</LinkButton>
-			<LinkButton href='/auth/login' variant='text' className='mr-2'>
+			<LinkButton href='/profile' variant='text' className='px-4 mr-4'>
 				Panel
 			</LinkButton>
 			<LinkButton href='/auth/signout' className='mr-2'>
