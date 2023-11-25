@@ -18,7 +18,7 @@ export default async function Home() {
 		<main className='px-10 bg-white text-black flex flex-col '>
 			<ProfileInfo />
 			<div className='flex-col flex h-[20vh] justify-center items-center'>
-				<h1 className='text-4xl'>Welcome, {author}</h1>
+				<h1 className='text-4xl'>Welcome, {author.full_name}</h1>
 				<h4>Here are the blogs written by you</h4>
 			</div>
 			<div>
