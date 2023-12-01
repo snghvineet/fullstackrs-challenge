@@ -7,8 +7,8 @@ import { createClient } from '@/utils/client';
 import { useRouter } from 'next/navigation';
 
 const BlogForm = ({ header, blog, type }) => {
-	const [content, setContent] = useState(blog.content);
-	const [title, setTitle] = useState(blog.title);
+	const [content, setContent] = useState(blog?.content);
+	const [title, setTitle] = useState(blog?.title);
 
 	const router = useRouter();
 
