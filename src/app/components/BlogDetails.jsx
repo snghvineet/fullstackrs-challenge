@@ -1,3 +1,4 @@
+import { fetchBlog } from '@/utils/fetch-blogs';
 import React from 'react';
 
 const DEMO_BLOG = {
@@ -17,11 +18,13 @@ const DEMO_BLOG = {
 };
 
 const Divider = ({ width = 2 }) => {
-	return <div className={`h-[${width}px] w-full bg-gray-500`} />;
+	return <div className={`h-[2px] w-full bg-gray-300`} />;
 };
 
-const BlogDetails = ({ blog }) => {
-	blog = DEMO_BLOG;
+const BlogDetails = async ({ id }) => {
+	const data = await fetchBlog(id);
+	// console.log(data);
+	const blog = data;
 	const date = blog.publishedOn.toLocaleDateString('en-US', {
 		month: 'long',
 		day: 'numeric',
@@ -30,19 +33,18 @@ const BlogDetails = ({ blog }) => {
 	return (
 		<div className='bg-white text-black px-60 min-h-[90vh]'>
 			<section className='pt-12 pb-4'>
-				<h1 className='text-6xl text-start px-4 mb-6 font-semibold'>
+				<h1 className='text-6xl text-start px-4 mb-8 font-semibold'>
 					{blog.title}
 				</h1>
-				<Divider />
 				<div className='px-4 text-lg flex justify-between items-center py-4'>
 					<span className='font-bold'>{blog.author}</span>
 					<span className='font-bold'>Published: {date}</span>
 				</div>
 				<Divider />
 			</section>
-			<div className='px-60 mt-12 text-lg text-justify'>
+			<div className='mx-auto w-[40vw] mt-12 text-lg text-justify '>
 				{blog.content.split('\n').map((i, key) => (
-					<div key={key}>
+					<div key={key} className='mb-6'>
 						{i}
 						<br />
 					</div>

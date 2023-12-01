@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { twMerge } from 'tailwind-merge';
 
 const LinkButton = ({ href, children, variant, className = '' }) => {
-	let btnStyle = 'bg-white text-black hover:bg-gray-300';
-	if (variant === 'text') btnStyle = 'text-gray-300 hover:text-white';
+	let btnStyle = 'bg-white text-black hover:bg-lime-300';
+	if (variant === 'text') btnStyle = 'text-gray-300 hover:text-lime-300';
 	return (
 		<Link href={href}>
 			<div
@@ -19,9 +19,17 @@ const LinkButton = ({ href, children, variant, className = '' }) => {
 	);
 };
 
-const Button = ({ children, variant, className, onClick }) => {
-	let btnStyle = 'bg-white text-black hover:bg-gray-300';
-	if (variant === 'text') btnStyle = 'text-gray-300 hover:text-white';
+const Button = ({
+	children,
+	variant,
+	className,
+	onClick,
+	outline,
+	options,
+}) => {
+	let btnStyle = 'bg-white text-black hover:bg-lime-300';
+	if (outline) btnStyle = twMerge(btnStyle, 'border-2 border-lime-300');
+	if (variant === 'text') btnStyle = 'text-gray-400 hover:text-lime-300';
 	if (variant === 'primary') {
 		children = <button type='submit'>{children}</button>;
 		btnStyle = 'text-white bg-black hover:bg-gray-800 ';
@@ -34,10 +42,22 @@ const Button = ({ children, variant, className, onClick }) => {
 				className
 			)}
 			onClick={onClick}
+			{...options}
 		>
 			{children}
 		</button>
 	);
 };
 
-export { LinkButton, Button };
+const IconButton = ({ icon, onClick, className }) => {
+	return (
+		<button
+			className={twMerge('text-2xl text-gray-800', className)}
+			onClick={onClick}
+		>
+			{icon}
+		</button>
+	);
+};
+
+export { LinkButton, Button, IconButton };

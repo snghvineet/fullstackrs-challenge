@@ -13,16 +13,21 @@ export default async function Home() {
 	} = await supabase.auth.getUser();
 	// console.log(user);
 	const { blogs, author } = await fetchAllBlogs({ authorId: user.id });
-	console.log(blogs);
+	// console.log(blogs);
 	return (
-		<main className='px-10 bg-white text-black flex flex-col '>
-			<ProfileInfo />
-			<div className='flex-col flex h-[20vh] justify-center items-center'>
-				<h1 className='text-4xl'>Welcome, {author.full_name}</h1>
-				<h4>Here are the blogs written by you</h4>
-			</div>
+		<main className='px-10 py-10 bg-white text-black flex '>
+			<ProfileInfo
+				name={author.full_name}
+				email={user.email}
+				count={blogs.length}
+			/>
+
+			{/* <div className='flex-col flex justify-center h-[20vh] items-center flex-grow'>
+					<h1 className='text-4xl'>Welcome, {author.full_name}</h1>
+					<h4>Here are the blogs written by you</h4>
+				</div> */}
 			<div>
-				<BlogFeed blogs={blogs} />
+				<BlogFeed blogs={blogs} editable={true} header='Your blogs' />
 			</div>
 		</main>
 	);

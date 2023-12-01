@@ -9,7 +9,7 @@ import { Button } from './Button';
 import { createClient } from '@/utils/client';
 
 const AuthForm = ({ type }) => {
-	console.log('Auth section');
+	// console.log('Auth section');
 	const supabase = createClient();
 	const router = useRouter();
 	const signingUp = type === 'signup';
@@ -44,7 +44,7 @@ const AuthForm = ({ type }) => {
 			email,
 			password,
 		});
-		console.log(data, error);
+		// console.log(data, error);
 
 		if (error) return router.replace('/auth/login?message=Invalid Credentials');
 		router.refresh();

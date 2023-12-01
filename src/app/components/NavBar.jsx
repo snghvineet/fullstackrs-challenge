@@ -14,7 +14,7 @@ const NavBar = async ({ loggedIn }) => {
 		data: { user },
 	} = await supabase.auth.getUser();
 
-	console.log(user);
+	// console.log(user);
 
 	const logoutHandler = async () => {
 		'use server';
@@ -25,7 +25,7 @@ const NavBar = async ({ loggedIn }) => {
 		return redirect('/auth/login');
 	};
 
-	console.log('here in nav');
+	// console.log('here in nav');
 	const notLoggedInNavComponents = (
 		<>
 			<LinkButton href='/auth/login' variant='text' className='mr-2'>
@@ -38,7 +38,7 @@ const NavBar = async ({ loggedIn }) => {
 	);
 	const loggedInNavComponents = (
 		<>
-			<LinkButton href='/write-blog' variant='text' className='px-4'>
+			<LinkButton href='/blogs/new' variant='text' className='px-4'>
 				Write a blog
 			</LinkButton>
 			<LinkButton href='/profile' variant='text' className='px-4 mr-4'>

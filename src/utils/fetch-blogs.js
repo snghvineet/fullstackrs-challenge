@@ -1,7 +1,28 @@
 import { cookies } from 'next/headers';
 import { createClient } from './server';
 
-export async function fetchAllBlogs({ authorId }) {
+export async function fetchBlog(id) {
+	const cookieStore = cookies();
+	const supabase = createClient(cookieStore);
+
+	const { data: blog } = await supabase.from('blogs').select().eq('id', id);
+	const { data: author, error } = await supabase
+		.from('profiles')
+		.select('full_name')
+		.eq('id', blog[0].author_id);
+
+	return {
+		id: blog[0].id,
+		title: blog[0].title,
+		content: blog[0].content,
+		publishedOn: new Date(blog[0].created_at),
+		author: author[0].full_name,
+	};
+}
+
+export async function fetchAllBlogs(options) {
+	let authorId = null;
+	if (options) authorId = options.authorId;
 	const cookieStore = cookies();
 	const supabase = createClient(cookieStore);
 	let query1 = supabase.from('blogs').select();
