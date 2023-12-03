@@ -7,6 +7,7 @@ import Logo from './Logo';
 import { FaPencil } from 'react-icons/fa6';
 import {
 	IoIosAddCircle,
+	IoIosHome,
 	IoIosLogOut,
 	IoIosPaper,
 	IoIosPerson,
@@ -29,6 +30,15 @@ const SideBar = ({ open, closeSideBar }) => {
 	const router = useRouter();
 	const visibleClass = open ? 'block' : 'hidden';
 	const buttons = [
+		{
+			id: 'home-button',
+			text: 'Home',
+			icon: <IoIosHome />,
+			onClick: () => {
+				closeSideBar();
+				router.replace('/');
+			},
+		},
 		{
 			id: 'write-button',
 			text: 'Write a blog',
