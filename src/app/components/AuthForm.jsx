@@ -53,6 +53,7 @@ const AuthForm = ({ type }) => {
 
 	const handleSignUp = async () => {
 		console.log('Signing up...');
+		setLoading(true);
 		const { error } = await supabase.auth.signUp({
 			email,
 			password,
@@ -62,6 +63,10 @@ const AuthForm = ({ type }) => {
 			},
 		});
 		router.refresh();
+		resetEmail();
+		passwordReset();
+		fullnameReset();
+		setLoading(false);
 		if (error) {
 			return router.replace('/auth/login?message=Could not authenticate user');
 		}
@@ -81,6 +86,9 @@ const AuthForm = ({ type }) => {
 		});
 		// console.log(data, error);
 		setLoading(false);
+		resetEmail();
+		passwordReset();
+		fullnameReset();
 		if (error) return router.replace('/auth/login?message=Invalid Credentials');
 
 		router.refresh();
@@ -96,9 +104,6 @@ const AuthForm = ({ type }) => {
 		if (fullnameError || emailError || passwordError) return;
 		if (signingUp) handleSignUp();
 		else handleSignIn();
-		resetEmail();
-		passwordReset();
-		fullnameReset();
 	};
 	const buttonText = signingUp ? 'Create Account' : 'Sign in';
 	return (
