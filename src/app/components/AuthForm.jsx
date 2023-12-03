@@ -58,7 +58,7 @@ const AuthForm = ({ type }) => {
 			email,
 			password,
 			options: {
-				emailRedirectTo: `${window.location.origin}/auth/callback`,
+				emailRedirectTo: `/auth/callback`,
 				data: { full_name: fullname },
 			},
 		});
