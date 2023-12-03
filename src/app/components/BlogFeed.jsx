@@ -48,7 +48,7 @@ const BlogFeed = ({ blogs = [], header = 'Feed', editable }) => {
 		else router.refresh();
 	};
 	return (
-		<section className='mx-12 pb-12'>
+		<section className='md:mx-12 lg:mx-24 xl:mx-32 pb-12'>
 			<div className='flex w-full items-center justify-between mb-2'>
 				<h6 className='text-xl font-semibold '>{header}</h6>
 				{/* <ul className='flex'>

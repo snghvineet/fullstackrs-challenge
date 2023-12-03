@@ -12,9 +12,13 @@ const Input = ({
 	value,
 	onChange,
 	variant = 'text',
+	onBlur,
+	error,
 }) => {
 	const id = 'input-id-' + label;
-
+	const outlineStyle = error
+		? 'focus:outline-red-100'
+		: 'focus:outline-lime-100';
 	return (
 		<div className='flex flex-col mb-6 w-full'>
 			<label htmlFor={id} className='font-semibold text-lg mb-2'>
@@ -22,25 +26,33 @@ const Input = ({
 			</label>
 			{variant === 'text' ? (
 				<input
-					className='border border-gray-300 rounded-xl py-4 px-6 outline-none outline-offset-0 focus:outline-lime-100 focus:outline-4'
+					className={twMerge(
+						'border border-gray-300 rounded-xl py-4 px-6 outline-none outline-offset-0 focus:outline-4',
+						outlineStyle
+					)}
 					id={id}
 					placeholder={placeholder}
 					value={value}
 					onChange={onChange}
+					onBlur={onBlur}
 					{...inputProps}
 				/>
 			) : (
 				<textarea
-					className='resize-none border border-gray-300 rounded-xl py-4 px-6 outline-none outline-offset-0 focus:outline-lime-100 focus:outline-4'
+					className={twMerge(
+						'resize-none border border-gray-300 rounded-xl py-4 px-6 outline-none outline-offset-0 focus:outline-4',
+						outlineStyle
+					)}
 					id={id}
 					rows={14}
 					placeholder={placeholder}
 					value={value}
 					onChange={onChange}
+					onBlur={onBlur}
 					{...inputProps}
 				/>
 			)}
-			<span className='mt-2 hidden'>Error text</span>
+			{error && <span className='mt-2 text-red-500'>{error}</span>}
 		</div>
 	);
 };

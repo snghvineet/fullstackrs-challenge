@@ -8,7 +8,9 @@ const BlogListItem = ({ blog, editable, editHandler, deleteHandler }) => {
 	const briefContent = blog.content.substring(0, 240) + '...';
 	return (
 		<div className='bg-slate-100 rounded-lg px-6 pb-3 pt-6'>
-			<h1 className='text-2xl font-semibold'>{blog.title}</h1>
+			<h1 className='text-xl sm:text-2xl font-semibold mb-1 md:mb-0'>
+				{blog.title}
+			</h1>
 			<span className='text-sm'>
 				{briefContent}{' '}
 				<Link className='text-sky-500 underline' href={`/blogs/${blog.id}`}>

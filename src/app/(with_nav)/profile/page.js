@@ -15,7 +15,7 @@ export default async function Home() {
 	const { blogs, author } = await fetchAllBlogs({ authorId: user.id });
 	// console.log(blogs);
 	return (
-		<main className='px-10 py-10 bg-white text-black flex '>
+		<main className='px-10 py-10 bg-white text-black flex flex-col lg:flex-row'>
 			<ProfileInfo
 				name={author.full_name}
 				email={user.email}

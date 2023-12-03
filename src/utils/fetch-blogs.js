@@ -17,6 +17,7 @@ export async function fetchBlog(id) {
 		content: blog[0].content,
 		publishedOn: new Date(blog[0].created_at),
 		author: author[0].full_name,
+		imageUrl: blog[0].image_url,
 	};
 }
 
@@ -45,6 +46,7 @@ export async function fetchAllBlogs(options) {
 			publishedOn: new Date(val.created_at),
 			title: val.title,
 			content: val.content,
+			imageUrl: val.image_url,
 		};
 	});
 	return { blogs, author: authors[0] };

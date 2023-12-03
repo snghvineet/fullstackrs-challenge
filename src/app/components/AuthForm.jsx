@@ -7,15 +7,49 @@ import Link from 'next/link';
 import Input, { CheckBox } from './Input';
 import { Button } from './Button';
 import { createClient } from '@/utils/client';
+import useInput from '@/hooks/use-input';
+import LoadingSpinner from './LoadingSpinner';
 
 const AuthForm = ({ type }) => {
 	// console.log('Auth section');
+	const [loading, setLoading] = useState(false);
 	const supabase = createClient();
 	const router = useRouter();
 	const signingUp = type === 'signup';
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [fullname, setFullname] = useState('');
+	const {
+		value: email,
+		setValue: setEmail,
+		error: emailError,
+		onBlurHandler: emailBlurHandler,
+		reset: resetEmail,
+	} = useInput((value) => {
+		let regex = new RegExp(/\S+@\S+\.\S+/);
+		if (!value || value.trim().length === 0)
+			return 'This field cannot be empty';
+		if (!regex.test(value?.toLowerCase())) return 'Enter a valid email';
+		return null;
+	});
+	const {
+		value: password,
+		setValue: setPassword,
+		error: passwordError,
+		onBlurHandler: passwordBlurHandler,
+		reset: passwordReset,
+	} = useInput((value) => {
+		if (!value || value.trim().length === 0) return 'This field is required';
+		if (value.trim().length < 8)
+			return 'Passwords are atleast 8 characters long';
+		return null;
+	});
+	const {
+		value: fullname,
+		setValue: setFullname,
+		error: fullnameError,
+		onBlurHandler: fullnameBlurHandler,
+		reset: fullnameReset,
+	} = useInput((value) => {
+		if (!value || value.trim().length === 0) return 'This field is required';
+	});
 
 	const handleSignUp = async () => {
 		console.log('Signing up...');
@@ -39,26 +73,34 @@ const AuthForm = ({ type }) => {
 	};
 
 	const handleSignIn = async () => {
+		setLoading(true);
 		console.log('trying to sign in');
 		const { data, error } = await supabase.auth.signInWithPassword({
 			email,
 			password,
 		});
 		// console.log(data, error);
-
+		setLoading(false);
 		if (error) return router.replace('/auth/login?message=Invalid Credentials');
+
 		router.refresh();
 		return router.replace('/auth/callback');
 	};
 
 	const submitForm = (e) => {
 		e.preventDefault();
-
-		console.log('Form being submitted.', window.location.origin);
-		signingUp ? handleSignUp() : handleSignIn();
+		if (signingUp) fullnameBlurHandler();
+		emailBlurHandler();
+		passwordBlurHandler();
+		// console.log(fullnameError, emailError, passwordError);
+		if (fullnameError || emailError || passwordError) return;
+		if (signingUp) handleSignUp();
+		else handleSignIn();
+		resetEmail();
+		passwordReset();
+		fullnameReset();
 	};
-	const formAction =
-		type === 'signup' ? `/auth/singup/callback` : `/auth/login/callback`;
+	const buttonText = signingUp ? 'Create Account' : 'Sign in';
 	return (
 		<form className='flex flex-col items-center text-lg' onSubmit={submitForm}>
 			{signingUp && (
@@ -67,6 +109,8 @@ const AuthForm = ({ type }) => {
 					placeholder='Your name'
 					value={fullname}
 					onChange={(e) => setFullname(e.target.value)}
+					error={fullnameError}
+					onBlur={fullnameBlurHandler}
 				/>
 			)}
 			<Input
@@ -74,17 +118,21 @@ const AuthForm = ({ type }) => {
 				placeholder='author@example.com'
 				value={email}
 				onChange={(e) => setEmail(e.target.value)}
+				onBlur={emailBlurHandler}
+				error={emailError}
 			/>
 			<Input
 				label='Password'
 				placeholder='8+ characters'
 				value={password}
 				onChange={(e) => setPassword(e.target.value)}
+				onBlur={passwordBlurHandler}
 				inputProps={{ type: 'password' }}
+				error={passwordError}
 			/>
-			{signingUp && <CheckBox />}
+			{/* {signingUp && <CheckBox />} */}
 			<Button variant='primary' className='px-10 py-4 w-full mt-6'>
-				{signingUp ? 'Create Account' : 'Sign in'}
+				{loading ? <LoadingSpinner /> : buttonText}
 			</Button>
 			<label
 				htmlFor='link-checkbox'

@@ -1,4 +1,6 @@
+'use client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 
 const LinkButton = ({ href, children, variant, className = '' }) => {
@@ -31,13 +33,12 @@ const Button = ({
 	if (outline) btnStyle = twMerge(btnStyle, 'border-2 border-lime-300');
 	if (variant === 'text') btnStyle = 'text-gray-400 hover:text-lime-300';
 	if (variant === 'primary') {
-		children = <button type='submit'>{children}</button>;
 		btnStyle = 'text-white bg-black hover:bg-gray-800 ';
 	}
 	return (
 		<button
 			className={twMerge(
-				'w-fit px-8 py-3 rounded-full text-lg font-semibold text-center tracking-wide hover:cursor-pointer',
+				'w-fit px-8 py-3 rounded-full text-lg font-semibold text-center tracking-wide hover:cursor-pointer items-center flex justify-center',
 				btnStyle,
 				className
 			)}
@@ -48,7 +49,20 @@ const Button = ({
 		</button>
 	);
 };
+const RouteButton = ({ children }) => {
+	const router = useRouter();
 
+	return (
+		<button
+			className='bg-black text-white px-2 py-2 rounded-full font-bold hover:cursor-pointer mt-4 '
+			onClick={() => {
+				router.back();
+			}}
+		>
+			{children}
+		</button>
+	);
+};
 const IconButton = ({ icon, onClick, className }) => {
 	return (
 		<button
@@ -60,4 +74,4 @@ const IconButton = ({ icon, onClick, className }) => {
 	);
 };
 
-export { LinkButton, Button, IconButton };
+export { LinkButton, Button, IconButton, RouteButton };
