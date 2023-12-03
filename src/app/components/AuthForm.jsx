@@ -58,7 +58,7 @@ const AuthForm = ({ type }) => {
 			email,
 			password,
 			options: {
-				emailRedirectTo: `/auth/callback`,
+				emailRedirectTo: `${process.env.NEXT_PUBLIC_HOSTURL}/auth/callback`,
 				data: { full_name: fullname },
 			},
 		});
