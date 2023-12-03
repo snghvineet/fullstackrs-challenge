@@ -56,7 +56,7 @@ const RouteButton = ({ children }) => {
 		<button
 			className='bg-black text-white px-2 py-2 rounded-full font-bold hover:cursor-pointer mt-4 '
 			onClick={() => {
-				router.back();
+				router.replace('/');
 			}}
 		>
 			{children}

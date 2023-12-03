@@ -1,7 +1,7 @@
 import AuthForm from '@/app/components/AuthForm';
 import { RouteButton } from '@/app/components/Button';
 import { FaExclamationCircle } from 'react-icons/fa';
-import { IoIosArrowRoundBack } from 'react-icons/io';
+import { IoIosArrowRoundBack, IoIosHome } from 'react-icons/io';
 
 export default function Login({ searchParams }) {
 	const { message } = searchParams;
@@ -9,7 +9,7 @@ export default function Login({ searchParams }) {
 		<main className='px-10 bg-white text-black'>
 			<RouteButton>
 				<span className='text-3xl'>
-					<IoIosArrowRoundBack />
+					<IoIosHome />
 				</span>
 			</RouteButton>
 			<div className='h-[100vh] w-full flex items-center justify-center'>
