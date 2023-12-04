@@ -102,7 +102,7 @@ const BlogForm = ({ header, blog, type }) => {
 				blogError = err;
 			}
 		}
-		setUploadingBlog(false);
+		router.refresh();
 		if (!blogError) {
 			resetTitle();
 			resetContent();
@@ -111,6 +111,7 @@ const BlogForm = ({ header, blog, type }) => {
 			);
 			router.replace('/profile');
 		}
+		setUploadingBlog(false);
 	};
 
 	const buttonText = type === 'new' ? 'Create' : 'Update';
@@ -158,8 +159,10 @@ const BlogForm = ({ header, blog, type }) => {
 			<div className='flex justify-end'>
 				<Button
 					variant='text'
-					onClick={() => router.replace('/profile')}
-					options={{ type: 'button', disabled: !uploadingBlog }}
+					onClick={() => {
+						router.replace('/profile');
+					}}
+					options={{ type: 'button', disabled: uploadingBlog }}
 				>
 					Cancel
 				</Button>
