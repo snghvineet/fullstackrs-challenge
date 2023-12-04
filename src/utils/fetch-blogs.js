@@ -26,7 +26,10 @@ export async function fetchAllBlogs(options) {
 	if (options) authorId = options.authorId;
 	const cookieStore = cookies();
 	const supabase = createClient(cookieStore);
-	let query1 = supabase.from('blogs').select();
+	let query1 = supabase
+		.from('blogs')
+		.select()
+		.order('created_at', { ascending: false });
 	let query2 = supabase.from('profiles').select('id, full_name');
 
 	if (authorId) {
