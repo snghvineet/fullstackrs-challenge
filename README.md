@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# StackrsBlog
+A simple blogging webapp build using NextJs and Supabase for fullstackrs/challenge. <br/>
+Deployed at [fullstackrs-challenge.vercel.app](https://fullstackrs-challenge.vercel.app/)
+## How to run locally
+- Clone the repo.
+- Go to supabase and create a new project.
+- Create profiles table
+  ```
+  create table profiles (
+  id uuid references auth.users on delete cascade not null primary key,
+  created_at timestamp default now(),
+  full_name text
+  );
+  
+  create policy "Public profiles are viewable by everyone." on profiles
+  for select using (true);
 
-## Getting Started
+  create policy "Users can insert their own profile." on profiles
+  for insert with check (auth.uid() = id);
+  
+  create policy "Users can update own profile." on profiles
+  for update using (auth.uid() = id);
 
-First, run the development server:
+  -- This trigger automatically creates a profile entry when a new user signs up via Supabase Auth.
+  -- See https://supabase.com/docs/guides/auth/managing-user-data#using-triggers for more details.
+  
+  create function public.handle_new_user()
+  returns trigger as $$
+  begin
+    insert into public.profiles (id, full_name)
+    values (new.id, new.raw_user_meta_data->>'full_name');
+    return new;
+  end;
+  
+  $$ language plpgsql security definer;
+  create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+  ```
+- Similarly create blogs table in supabase (refer to schema for more info).
+- Create `.env.local` in the root directory of the project (where `next.config.js` is).
+  ```
+  NEXT_PUBLIC_SUPABASE_URL=<Supabase Project Url>
+  NEXT_PUBLIC_SUPABASE_ANON_KEY=<Supabase Project Anon Key>
+  NEXT_PUBLIC_HOSTURL=http://localhost:<port>
+  ```
+- Finally, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+  ```bash
+  npm run dev
+  # or
+  yarn dev
+  # or
+  pnpm dev
+  # or
+  bun dev
+  ```
+## Schema
+![image](https://github.com/snghvineet/fullstackrs-challenge/assets/79019403/65ad72d2-d295-4eba-b977-58b946b8581e)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
