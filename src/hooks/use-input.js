@@ -9,7 +9,7 @@ export default function useInput(validator = (value) => null, state = '') {
 	const onBlurHandler = () => setTouched(true);
 	const reset = () => {
 		setValue('');
-		// setTouched(false);
+		setTouched(false);
 	};
 	return { value, setValue, error, onBlurHandler, reset };
 }

@@ -53,7 +53,6 @@ const AuthForm = ({ type }) => {
 
 	const handleSignUp = async () => {
 		console.log('Signing up...');
-		setLoading(true);
 		const { error } = await supabase.auth.signUp({
 			email,
 			password,
@@ -62,13 +61,10 @@ const AuthForm = ({ type }) => {
 				data: { full_name: fullname },
 			},
 		});
-		router.refresh();
-		resetEmail();
-		passwordReset();
-		fullnameReset();
-		setLoading(false);
+
 		if (error) {
-			return router.replace('/auth/login?message=Could not authenticate user');
+			// router.replace('/auth/login?message=Could not authenticate user');
+			return { error: 'Could not authenticate user' };
 		}
 
 		return router.replace(
@@ -78,32 +74,47 @@ const AuthForm = ({ type }) => {
 	};
 
 	const handleSignIn = async () => {
-		setLoading(true);
 		console.log('trying to sign in');
 		const { data, error } = await supabase.auth.signInWithPassword({
 			email,
 			password,
 		});
 		// console.log(data, error);
-		setLoading(false);
-		resetEmail();
-		passwordReset();
-		fullnameReset();
-		if (error) return router.replace('/auth/login?message=Invalid Credentials');
 
-		router.refresh();
-		return router.replace('/auth/callback');
+		if (error) {
+			router.replace('/auth/login?message=Invalid Credentials');
+			return { error: 'Invalid Credentials' };
+		}
+
+		router.replace('/auth/callback');
+		return {
+			error: null,
+		};
 	};
 
-	const submitForm = (e) => {
+	const submitForm = async (e) => {
 		e.preventDefault();
+
 		if (signingUp) fullnameBlurHandler();
 		emailBlurHandler();
 		passwordBlurHandler();
 		// console.log(fullnameError, emailError, passwordError);
 		if (fullnameError || emailError || passwordError) return;
-		if (signingUp) handleSignUp();
-		else handleSignIn();
+		setLoading(true);
+		let authError;
+		if (signingUp) {
+			const { error } = await handleSignUp();
+			authError = error;
+		} else {
+			const { error } = await handleSignIn();
+			if (error) authError = error;
+		}
+		setLoading(false);
+		if (!authError) {
+			resetEmail();
+			passwordReset();
+			fullnameReset();
+		}
 	};
 	const buttonText = signingUp ? 'Create Account' : 'Sign in';
 	return (

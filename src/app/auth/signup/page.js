@@ -10,7 +10,7 @@ export default function Home() {
 					<IoIosHome />
 				</span>
 			</RouteButton>
-			<div className='h-[100vh] w-full flex items-center justify-center'>
+			<div className='h-full w-full flex items-center justify-center py-4'>
 				<div className='xl:w-[30vw]'>
 					<h1 className='text-3xl md:text-4xl font-semibold mb-6'>
 						Sign up to StackrsBlog

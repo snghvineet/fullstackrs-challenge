@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Input from './Input';
 import { Button } from './Button';
 import { createClient } from '@/utils/client';
@@ -9,6 +9,8 @@ import DropImageUpload from './DropImageUpload';
 import ImagePreview from './ImagePreview';
 import { v4 as uuidv4 } from 'uuid';
 import useInput from '@/hooks/use-input';
+import LoadingSpinner from './LoadingSpinner';
+import { toast } from 'react-toastify';
 
 const BlogForm = ({ header, blog, type }) => {
 	const {
@@ -16,6 +18,7 @@ const BlogForm = ({ header, blog, type }) => {
 		setValue: setContent,
 		onBlurHandler: contentBlurHandler,
 		error: contentError,
+		reset: resetContent,
 	} = useInput((value) => {
 		if (!value || value.trim().length === 0)
 			return 'This field cannot be empty';
@@ -27,12 +30,14 @@ const BlogForm = ({ header, blog, type }) => {
 		setValue: setTitle,
 		error: titleError,
 		onBlurHandler: titleBlurHandler,
+		reset: resetTitle,
 	} = useInput((value) => {
 		if (!value || value.trim().length === 0)
 			return 'This field cannot be empty';
 		return null;
 	}, blog?.title ?? '');
 	const [imageFile, setImageFile] = useState();
+	const [uploadingBlog, setUploadingBlog] = useState(false);
 	const router = useRouter();
 	const supabase = createClient();
 
@@ -49,6 +54,7 @@ const BlogForm = ({ header, blog, type }) => {
 
 	const submitForm = async (e) => {
 		e.preventDefault();
+		setUploadingBlog(true);
 		titleBlurHandler();
 		contentBlurHandler();
 		if (titleError || contentError) return;
@@ -66,7 +72,7 @@ const BlogForm = ({ header, blog, type }) => {
 				const { error: err } = await supabase
 					.from('blogs')
 					.insert({ title, content, author_id: user.id, image_url: imgUrl });
-				error = err;
+				blogError = err;
 			} else {
 				const { error: err } = await supabase
 					.from('blogs')
@@ -75,16 +81,14 @@ const BlogForm = ({ header, blog, type }) => {
 			}
 		}
 		if (type === 'update') {
-			const imgPath = `${uuidv4()}${imageFile.path.split('.').pop()}`;
 			if (imageFile) {
 				const { data, error } = await supabase.storage
 					.from('blogs-image')
 					.upload(imgPath, imageFile);
-			}
-			const {
-				data: { publicUrl: imgUrl },
-			} = supabase.storage.from('blogs-image').getPublicUrl(imgPath);
-			if (imageFile) {
+				const imgPath = `${uuidv4()}${imageFile.path.split('.').pop()}`;
+				const {
+					data: { publicUrl: imgUrl },
+				} = supabase.storage.from('blogs-image').getPublicUrl(imgPath);
 				const { error: err } = await supabase
 					.from('blogs')
 					.update({ title, content, image_url: imgUrl })
@@ -98,10 +102,19 @@ const BlogForm = ({ header, blog, type }) => {
 				blogError = err;
 			}
 		}
+		setUploadingBlog(false);
 		if (!blogError) {
+			resetTitle();
+			resetContent();
+			toast.success(
+				`Blog has been ${type === 'update' ? 'updated' : 'created'}.`
+			);
 			router.replace('/profile');
 		}
 	};
+
+	const buttonText = type === 'new' ? 'Create' : 'Update';
+
 	return (
 		<form
 			className='sm:mx-8 md:mx-12 lg:mx-20 xl:mx-40 py-8'
@@ -146,11 +159,13 @@ const BlogForm = ({ header, blog, type }) => {
 				<Button
 					variant='text'
 					onClick={() => router.replace('/profile')}
-					options={{ type: 'button' }}
+					options={{ type: 'button', disabled: !uploadingBlog }}
 				>
 					Cancel
 				</Button>
-				<Button outline={true}>{type === 'new' ? 'Create' : 'Update'}</Button>
+				<Button outline={true} options={{ disabled: uploadingBlog }}>
+					{uploadingBlog ? <LoadingSpinner /> : buttonText}
+				</Button>
 			</div>
 		</form>
 	);
