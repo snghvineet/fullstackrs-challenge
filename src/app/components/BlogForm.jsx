@@ -102,7 +102,7 @@ const BlogForm = ({ header, blog, type }) => {
 				blogError = err;
 			}
 		}
-		router.refresh();
+
 		if (!blogError) {
 			resetTitle();
 			resetContent();
@@ -111,6 +111,7 @@ const BlogForm = ({ header, blog, type }) => {
 			);
 			router.replace('/profile');
 		}
+		router.refresh();
 		setUploadingBlog(false);
 	};
 
